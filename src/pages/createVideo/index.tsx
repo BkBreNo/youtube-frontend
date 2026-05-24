@@ -1,7 +1,8 @@
 import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import {
-    InputDescription
+    InputDescription,
+    InputFile
 } from "./styles";
 import {
     FormContainer,
@@ -17,6 +18,7 @@ import { VideoContext } from "../../contexts/VideoContext";
 function CreateVideo() {
     const { createVideo, info, setInfo } = useContext(VideoContext);
     const { user, token, login } = useContext(UserContext);
+    const [image, setImage] = useState<File | null>(null)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
 
@@ -34,7 +36,7 @@ function CreateVideo() {
             }
         }
         if (title != '' && description != '') {
-            createVideo(token, title, description, user.id, date, 0)
+            createVideo(token, image, title, description, user.id, date, 0)
         }
     }
 
@@ -46,6 +48,10 @@ function CreateVideo() {
                         <span> {info}</span>
                     )}
                     <Title>Criar Video</Title>
+                     <InputContent>
+                        <span>Capa</span>
+                        <InputFile type='file' accept="image/png, image/jpeg" onChange={(e) => setImage(e.target.files?.[0] || null)} />
+                    </InputContent>
                     <InputContent>
                         <span>Titulo</span>
                         <InputText type='text' value={title} onChange={(e) => setTitle(e.target.value)} />

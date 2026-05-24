@@ -20,7 +20,7 @@ type VideoContextType = {
     info: string,
     setInfo: (newState: string) => void,
     listVideos: ListVideosProps[],
-    createVideo: (token: string, title: string, description: string, user_id: string, date: string, views: Number) => void,
+    createVideo: (token: string, image: File | null, title: string, description: string, user_id: string, date: string, views: Number) => void,
     searchVideo: (search: string) => void,
     videoAddviews: (video_id: string) => void,
 }
@@ -40,8 +40,19 @@ export const VideoStorage = ({ children }: VideoStorageProps) => {
     const [info, setInfo] = useState(initialValue.info);
     const [listVideos, setListVideos] = useState(initialValue.listVideos);
 
-    const createVideo = (token: string, title: string, description: string, user_id: string, date: string, views: Number) => {
-        api.post('/videos/create-video', { title, description, user_id, date, views }, { headers: { Authorization: token } }).then(({ data }) => {
+    const createVideo = (token: string, image: File | null, title: string, description: string, user_id: string, date: string, views: Number) => {
+
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+        formData.append('user_id', user_id);
+        formData.append('date', date);
+        formData.append('views', String(views));
+        
+        if (image) {
+            formData.append('image', image);
+        }
+        api.post('/videos/create-video', formData, { headers: { Authorization: token, 'Content-Type': 'multipart/form-data' } }).then(({ data }) => {
             setInfo(data.message);
         }).catch(() => {
             setInfo('Não foi possivel criar o video, tente novamente');
