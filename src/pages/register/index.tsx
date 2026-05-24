@@ -27,12 +27,14 @@ function Register() {
 
     useEffect(() => {
         if (register) navigate('/login', { state: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [register]);
 
     useEffect(() => {
         return () => {
             setRegisterError(null)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import { createContext, ReactNode, useState } from "react";
 import api from "../api";
 
 type VideoStorageProps = {
