@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import {
     InputDescription,
@@ -35,7 +35,7 @@ function CreateVideo() {
                 setInfo('Adicione descrição');
             }
         }
-        if (title != '' && description != '') {
+        if (title !== '' && description !== '') {
             createVideo(token, image, title, description, user.id, date, 0)
         }
     }

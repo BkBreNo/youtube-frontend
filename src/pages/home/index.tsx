@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { MenuContext } from "../../contexts/MenuContext";
 import VideoComponent from "../../components/videoComponent";
 import {
@@ -18,7 +18,8 @@ function Home() {
     useEffect(() => {
         setRegister(null)
         setInfo('');
-        searchVideo();
+        searchVideo('');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

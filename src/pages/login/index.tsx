@@ -25,6 +25,7 @@ function Login() {
         if (login) {
             navigate('/');
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [login])
 
     return (

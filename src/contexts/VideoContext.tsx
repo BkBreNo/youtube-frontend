@@ -59,7 +59,7 @@ export const VideoStorage = ({ children }: VideoStorageProps) => {
         })
     }
 
-    const searchVideo = (search: string = '') => {
+    const searchVideo = (search: string) => {
         api.get('/videos/search', { params: { search } }).then(({ data }) => {
             setListVideos(data.videos);
         }).catch(() => { })
