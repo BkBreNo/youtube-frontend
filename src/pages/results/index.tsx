@@ -24,7 +24,7 @@ function Results() {
 
     useEffect(() => {
         searchVideo(searchQuery ?? '')
-    }, [searchQuery])
+    }, [searchQuery, searchVideo])
 
     return (
         <HomeContainer>
