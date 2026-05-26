@@ -19,7 +19,8 @@ function Home() {
         setInfo('');
         searchVideo('');
         setResults('');
-    }, [setRegister, setInfo, setResults])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <HomeContainer>
