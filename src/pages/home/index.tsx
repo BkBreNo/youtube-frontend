@@ -19,7 +19,7 @@ function Home() {
         setInfo('');
         searchVideo('');
         setResults('');
-    }, [])
+    }, [setRegister, setInfo, searchVideo, setResults])
 
     return (
         <HomeContainer>

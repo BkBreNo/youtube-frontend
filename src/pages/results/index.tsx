@@ -20,7 +20,7 @@ function Results() {
     useEffect(() => {
         setRegister(null)
         setInfo('');
-    }, [])
+    }, [setInfo, setRegister])
 
     useEffect(() => {
         searchVideo(searchQuery ?? '')
