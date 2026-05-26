@@ -11,7 +11,7 @@ import {
     TitleContainer
 } from "./styles";
 import { VideoContext } from "../../contexts/VideoContext";
-import { getColor, getPalette } from 'colorthief';
+import { getPalette } from 'colorthief';
 interface IProps {
     image: string,
     title: string,
