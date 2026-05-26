@@ -28,20 +28,18 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 import LoginIcon from '../../assets/icons/Login.svg'
 import SairIcon from '../../assets/icons/Sair.svg'
-import { VideoContext } from "../../contexts/VideoContext";
 
 function Header() {
     const navigate = useNavigate();
 
     const { login, user, logOut } = useContext(UserContext)
-    const { openMenu, setOpenMenu } = useContext(MenuContext);
+    const { openMenu, setOpenMenu, results, setResults } = useContext(MenuContext);
     const [dropDown, setDropDown] = useState(false);
 
     const nome = user.nome as string;
 
     const dropDownRef = useRef<HTMLDivElement>(null);
 
-    const { searchVideo } = useContext(VideoContext);
     useEffect(() => {
         setDropDown(false)
         function handleClickOutside(e: MouseEvent) {
@@ -69,9 +67,11 @@ function Header() {
 
             <SearchContainer>
                 <SearchInputContainer>
-                    <SearchInput placeholder='Pesquisar' onChange={(e) => searchVideo(e.target.value)} />
+                    <SearchInput placeholder='Pesquisar' value={results}
+                        onChange={(e) => setResults(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && results && navigate(`/results?search_query=${results}`)} />
                 </SearchInputContainer>
-                <SearchButton>
+                <SearchButton onClick={() => results && (navigate(`/results?search_query=${results}`))}>
                     <ButtonIcon alt="" src={SearchIcon} />
                 </SearchButton>
                 <ButtonContainer $margin='0 0 0 10px'>

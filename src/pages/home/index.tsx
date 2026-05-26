@@ -4,14 +4,13 @@ import VideoComponent from "../../components/videoComponent";
 import {
     HomeContainer,
     Container,
-    FilterContainer,
-    FilterCategory,
 } from "./styles";
 import { UserContext } from "../../contexts/UserContext";
 import { VideoContext } from "../../contexts/VideoContext";
+import FilterComponent from "../../components/FilterComponent";
 
 function Home() {
-    const { openMenu, } = useContext(MenuContext);
+    const { openMenu, setResults } = useContext(MenuContext);
     const { setRegister } = useContext(UserContext);
 
     const { setInfo, listVideos, searchVideo } = useContext(VideoContext);
@@ -19,25 +18,12 @@ function Home() {
         setRegister(null)
         setInfo('');
         searchVideo('');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        setResults('');
     }, [])
 
     return (
         <HomeContainer>
-            <FilterContainer>
-                <FilterCategory>Tudo</FilterCategory>
-                <FilterCategory>Música</FilterCategory>
-                <FilterCategory>Mixes</FilterCategory>
-                <FilterCategory>Lista de reprodução</FilterCategory>
-                <FilterCategory>Jogos</FilterCategory>
-                <FilterCategory>Hillsong United</FilterCategory>
-                <FilterCategory>Ao vivo</FilterCategory>
-                <FilterCategory>Guitarras clássicas</FilterCategory>
-                <FilterCategory>Contemporary workship music</FilterCategory>
-                <FilterCategory>Inteligência artificialc</FilterCategory>
-                <FilterCategory>Música brasileira</FilterCategory>
-                <FilterCategory>Computadores</FilterCategory>
-            </FilterContainer>
+            <FilterComponent />
             <Container $openMenu={openMenu}>
                 {openMenu ?
                     listVideos.slice(0, 3).map((listVideos: any) => (

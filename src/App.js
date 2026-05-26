@@ -11,6 +11,7 @@ import { VideoStorage } from "./contexts/VideoContext";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import CreateVideo from "./pages/createVideo";
+import Results from "./pages/results";
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/createVideo" element={<CreateVideo />} />
+                  <Route path="/results" element={<Results />} />
                 </Routes>
               </div>
             </div>

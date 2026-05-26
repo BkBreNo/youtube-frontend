@@ -8,14 +8,12 @@ export const HomeContainer = styled.div`
     box-sizing: border-box;
 `;
 
-export const Container = styled.div<{ $openMenu: boolean }>`
+export const Container = styled.div`
     padding: 24px 32px;
     width: 100%;
-    max-width: 1600px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    column-gap: 20px;
-    row-gap: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     box-sizing: border-box;
 `;
 

@@ -71,6 +71,9 @@ export const SearchButton = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    &:hover {
+        background-color: #f2f2f2;
+    }
 `;
 
 export const HeaderButton = styled.div`

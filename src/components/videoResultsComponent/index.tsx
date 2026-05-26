@@ -1,17 +1,15 @@
-import { useContext, useRef, useState } from "react";
+import { useContext } from "react";
 import {
+    ChannelContainer,
     ChannelImage,
     Container,
-    Content,
-    ContentEF,
     ImageBanner,
     TextCard,
     TextContainer,
-    Title,
-    TitleContainer
+    Title
 } from "./styles";
 import { VideoContext } from "../../contexts/VideoContext";
-import { getColor, getPalette } from 'colorthief';
+
 interface IProps {
     image: string,
     title: string,
@@ -20,6 +18,7 @@ interface IProps {
     time: string,
     date: string,
     video_id: string,
+    description: string
 }
 
 const diferencaEmDias = (dataVideo: string) => {
@@ -49,51 +48,30 @@ const viewsFormat = (views: number) => {
     return `${(views / 1000000).toFixed(1).replace('.0', '')} mi visualizações`
 }
 
-function VideoComponent({ video }: { video: IProps }) {
-
+function VideoResultsComponent({ video }: { video: IProps }) {
     const nome = video.user_name as string;
+
     const { videoAddviews } = useContext(VideoContext);
 
     const BASE_URL = process.env.REACT_APP_API_URL
     const PLACEHOLDER = 'https://i.ytimg.com/vi/T0mzlyJ_xqs/hq720.jpg';
-    const image = video.image ? `${BASE_URL}/uploads/${video.image}` : PLACEHOLDER;
-
-    const imgRef = useRef<HTMLImageElement>(null);
-    const [color, setColor] = useState('black');
-
-    const handleImageLoad = async () => {
-        const img = imgRef.current;
-        if (!img) return;
-
-        const palette = await getPalette(img, { colorCount: 6 });
-        if (!palette) return;
-
-        const mostVibrant = palette.reduce((prev, current) => {
-            return current.hsl().s > prev.hsl().s ? current : prev;
-        });
-        setColor(mostVibrant.css());
-    };
 
     return (
         <Container onClick={() => videoAddviews(video.video_id)}>
-            <ContentEF $color={color} />
-            <Content>
-                <ImageBanner ref={imgRef} src={image} crossOrigin="anonymous" onLoad={handleImageLoad} />
-                <TitleContainer>
+            <ImageBanner src={video.image ? `${BASE_URL}/uploads/${video.image}` : PLACEHOLDER} />
+            <TextContainer>
+                <Title>{video.title}</Title>
+                <TextCard>{viewsFormat(video.views)} • {tempoPassado(video.date)}</TextCard>
+                <ChannelContainer>
                     <ChannelImage>
                         {nome?.charAt(0) || ""}
                     </ChannelImage>
-                    <TextContainer>
-                        <Title>{video.title}</Title>
-                        <TextCard>{video.user_name}</TextCard>
-                        <TextCard>
-                            {viewsFormat(video.views)} • {tempoPassado(video.date)}
-                        </TextCard>
-                    </TextContainer>
-                </TitleContainer>
-            </Content>
+                    <TextCard>{video.user_name}</TextCard>
+                </ChannelContainer>
+                <TextCard>{video.description}</TextCard>
+            </TextContainer>
         </Container>
     )
 }
 
-export default VideoComponent;
+export default VideoResultsComponent;

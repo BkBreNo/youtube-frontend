@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div<{ $openMenu: boolean }>`
-    width: ${({ $openMenu }) => $openMenu ? '280px' : '88px'};
+    width: ${({ $openMenu }) => $openMenu ? '240px' : '88px'};
     height: calc(100vh - 55px);
     box-sizing: border-box;
     display: flex;
