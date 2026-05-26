@@ -1,1 +1,6 @@
-module.exports = { rules: { 'react-hooks/exhaustive-deps': 'warn' } }
+module.exports = {
+    plugins: ['react-hooks'],
+    rules: {
+        'react-hooks/exhaustive-deps': 'warn'
+    }
+}
