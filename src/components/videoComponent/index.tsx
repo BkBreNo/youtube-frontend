@@ -1,17 +1,20 @@
-import { useContext, useRef, useState } from "react";
+import { useContext } from "react";
 import {
     ChannelImage,
     Container,
     Content,
+    ContentContainer,
     ContentEF,
+    Icon,
     ImageBanner,
     TextCard,
     TextContainer,
     Title,
-    TitleContainer
+    TitleContainer,
 } from "./styles";
 import { VideoContext } from "../../contexts/VideoContext";
-import { getPalette } from 'colorthief';
+import { useNavigate } from "react-router-dom";
+
 interface IProps {
     image: string,
     title: string,
@@ -20,6 +23,7 @@ interface IProps {
     time: string,
     date: string,
     video_id: string,
+    image_color: string,
 }
 
 const diferencaEmDias = (dataVideo: string) => {
@@ -42,55 +46,44 @@ const tempoPassado = (dataVideo: string) => {
 }
 
 const viewsFormat = (views: number) => {
-    if (views === 0) return 'nenhuma visualização'
-    if (views === 1) return '1 visualização'
-    if (views < 1000) return `${views} visualizações`
-    if (views < 1000000) return `${(views / 1000).toFixed(1).replace('.0', '')} mil visualizações`
-    return `${(views / 1000000).toFixed(1).replace('.0', '')} mi visualizações`
+    if (views === 0) return 'nenhuma'
+    if (views === 1) return '1'
+    if (views < 1000) return `${views}`
+    if (views < 1000000) return `${(views / 1000).toFixed(0).replace('.0', '')} mil`
+    return `${(views / 1000000).toFixed(0).replace('.0', '')} mi`
 }
 
+
 function VideoComponent({ video }: { video: IProps }) {
+    const navigate = useNavigate();
 
     const nome = video.user_name as string;
-    const { videoAddviews } = useContext(VideoContext);
 
     const BASE_URL = process.env.REACT_APP_API_URL
-    const PLACEHOLDER = 'https://i.ytimg.com/vi/T0mzlyJ_xqs/hq720.jpg';
-    const image = video.image ? `${BASE_URL}/uploads/${video.image}` : PLACEHOLDER;
+    const image = video.image ? `${BASE_URL}/uploads/${video.image}` : 'https://i.ytimg.com/vi/T0mzlyJ_xqs/hq720.jpg';
 
-    const imgRef = useRef<HTMLImageElement>(null);
-    const [color, setColor] = useState('black');
-
-    const handleImageLoad = async () => {
-        const img = imgRef.current;
-        if (!img) return;
-
-        const palette = await getPalette(img, { colorCount: 6 });
-        if (!palette) return;
-
-        const mostVibrant = palette.reduce((prev, current) => {
-            return current.hsl().s > prev.hsl().s ? current : prev;
-        });
-        setColor(mostVibrant.css());
-    };
+    const bgColor = video.image_color ? JSON.parse(video.image_color) : [0, 0, 0];
 
     return (
-        <Container onClick={() => videoAddviews(video.video_id)}>
-            <ContentEF $color={color} />
+        <Container $color={bgColor} onClick={() => navigate(`/watch?v=${video.video_id}`)}>
+            <ContentEF $color={bgColor} />
             <Content>
-                <ImageBanner ref={imgRef} src={image} crossOrigin="anonymous" onLoad={handleImageLoad} />
-                <TitleContainer>
+                <ImageBanner src={image} />
+                <ContentContainer>
                     <ChannelImage>
                         {nome?.charAt(0) || ""}
                     </ChannelImage>
-                    <TextContainer>
+                    <TitleContainer>
                         <Title>{video.title}</Title>
-                        <TextCard>{video.user_name}</TextCard>
-                        <TextCard>
-                            {viewsFormat(video.views)} • {tempoPassado(video.date)}
-                        </TextCard>
-                    </TextContainer>
-                </TitleContainer>
+                        <TextContainer>
+                            <TextCard>{video.user_name}</TextCard>
+                            <Icon xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" focusable="false" aria-hidden="true"><path d="M5 4.623v14.755a1.5 1.5 0 002.261 1.294l12.766-7.51L22 12.002l-1.973-1.162L7.26 3.33A1.5 1.5 0 005 4.623Zm2 13.88V5.497L18.056 12 7 18.503Z"></path></Icon>
+                            <TextCard>
+                                {viewsFormat(video.views)}  {tempoPassado(video.date)}
+                            </TextCard>
+                        </TextContainer>
+                    </TitleContainer>
+                </ContentContainer>
             </Content>
         </Container>
     )

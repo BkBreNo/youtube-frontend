@@ -14,7 +14,7 @@ export const FilterContainer = styled.div`
     background-color: rgba(255,255,255,.95);
     backdrop-filter: blur(10px);
     overflow: hidden;
-    z-index: 99;
+    z-index: 999;
 `;
 
 export const FilterCategory = styled.div`

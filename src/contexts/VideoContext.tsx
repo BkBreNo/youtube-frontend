@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useCallback, useEffectEvent, useState } from "react";
 import api from "../api";
 
 type VideoStorageProps = {
@@ -12,26 +12,32 @@ type ListVideosProps = {
     image: string | null;
     user_id: string;
     user_name: string;
-    date: Date;
+    date: string;
     views: number;
+    video: string,
+    image_color: string,
 }
 
 type VideoContextType = {
     info: string,
     setInfo: (newState: string) => void,
     listVideos: ListVideosProps[],
+    setListVideos: (newState: ListVideosProps[]) => void,
     createVideo: (token: string, image: File | null, title: string, description: string, user_id: string, date: string, views: Number) => void,
     searchVideo: (search: string) => void,
     videoAddviews: (video_id: string) => void,
+    getVideo: (video_id: string) => void
 }
 
 const initialValue = {
     info: '',
     setInfo: () => { },
     listVideos: [] as ListVideosProps[],
+    setListVideos: () => { },
     createVideo: () => { },
     searchVideo: () => { },
     videoAddviews: () => { },
+    getVideo: () => { },
 }
 
 export const VideoContext = createContext<VideoContextType>(initialValue);
@@ -48,7 +54,7 @@ export const VideoStorage = ({ children }: VideoStorageProps) => {
         formData.append('user_id', user_id);
         formData.append('date', date);
         formData.append('views', String(views));
-        
+
         if (image) {
             formData.append('image', image);
         }
@@ -59,11 +65,17 @@ export const VideoStorage = ({ children }: VideoStorageProps) => {
         })
     }
 
-    const searchVideo = (search: string) => {
-        api.get('/videos/search', { params: { search } }).then(({ data }) => {
+    const getVideo = useCallback((video_id: string) => {
+        api.get('/videos/get-video', { params: { video_id } }).then(({ data }) => {
             setListVideos(data.videos);
         }).catch(() => { })
-    }
+    }, []);
+
+    const searchVideo = useEffectEvent((search: string) => {
+        api.get('/videos/search', { params: { search } }).then(({ data }) => {
+            setListVideos(data.videos);
+        }).catch(() => { });
+    });
 
     const videoAddviews = (video_id: string) => {
         api.post('/videos/addviews', { video_id }).then(({ data }) => { }).catch(() => { })
@@ -74,6 +86,8 @@ export const VideoStorage = ({ children }: VideoStorageProps) => {
             createVideo,
             info,
             setInfo,
+            getVideo,
+            setListVideos,
             searchVideo,
             listVideos,
             videoAddviews,

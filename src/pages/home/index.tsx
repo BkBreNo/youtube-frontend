@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { MenuContext } from "../../contexts/MenuContext";
 import VideoComponent from "../../components/videoComponent";
 import {
@@ -14,13 +14,13 @@ function Home() {
     const { setRegister } = useContext(UserContext);
 
     const { setInfo, listVideos, searchVideo } = useContext(VideoContext);
+
     useEffect(() => {
         setRegister(null)
         setInfo('');
-        searchVideo('');
         setResults('');
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        searchVideo('');
+    }, [setRegister, setInfo, setResults])
 
     return (
         <HomeContainer>
@@ -28,11 +28,11 @@ function Home() {
             <Container $openMenu={openMenu}>
                 {openMenu ?
                     listVideos.slice(0, 3).map((listVideos: any) => (
-                        <VideoComponent key={listVideos.title} video={listVideos} />
+                        <VideoComponent key={listVideos.video_id} video={listVideos} />
                     ))
                     :
                     listVideos.slice(0, 4).map((listVideos: any) => (
-                        <VideoComponent key={listVideos.title} video={listVideos} />
+                        <VideoComponent key={listVideos.video_id} video={listVideos} />
                     ))
                 }
 

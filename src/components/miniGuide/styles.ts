@@ -1,16 +1,36 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-export const Container = styled.div<{ $openMenu: boolean }>`
-    width: ${({ $openMenu }) => $openMenu ? '240px' : '88px'};
+export const Container = styled.div<{ $openMenu: boolean, $positionMenu: boolean }>`
+    ${({ $openMenu, $positionMenu }) => {
+        if ($positionMenu) {
+            return css`
+                display: none;
+            `
+        } else {
+            if ($openMenu) {
+                return css`
+                    display: flex;
+                    position: sticky;
+                    width: 240px;
+                    
+                `;
+            } else {
+                return css`
+                    display: flex;
+                    position: sticky;
+                    width: 88px;
+                `;
+            }
+        }
+    }}
     height: calc(100vh - 55px);
     box-sizing: border-box;
-    display: flex;
     align-items: center;
     flex-direction: column;
     overflow-y: auto;
-    position: sticky;
     top: 55px;
-
+    background-color: white;
+    z-index: 2000;
     &::-webkit-scrollbar-thumb {
         background-color: white;
     }
@@ -51,7 +71,7 @@ export const ExplorarContent = styled.div<{ $openExplorar: boolean }>`
     overflow: hidden;
 `;
 
-export const MenuItem = styled.div<{ $openMenu: boolean }>`
+export const MenuItem = styled.div<{ $openMenu?: boolean }>`
     width: 100%;
     min-height: ${({ $openMenu }) => $openMenu ? '45px' : '70px'};
     border-radius: 10px;

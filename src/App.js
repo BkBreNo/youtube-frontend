@@ -1,5 +1,4 @@
 import Header from "./components/header";
-import Menu from "./components/menu";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/home";
 import Shorts from "./pages/shorts";
@@ -12,6 +11,9 @@ import Login from "./pages/login";
 import Register from "./pages/register";
 import CreateVideo from "./pages/createVideo";
 import Results from "./pages/results";
+import Watch from "./pages/watchVideo";
+import MiniGuide from "./components/miniGuide";
+import Guide from "./components/Guide";
 
 function App() {
 
@@ -20,9 +22,10 @@ function App() {
       <VideoStorage>
         <BrowserRouter>
           <div className="App">
+            <Guide />
             <Header />
             <div style={{ display: 'flex', width: '100%' }}>
-              <Menu />
+              <MiniGuide />
               <div style={{ flex: 1, minWidth: 0, }}>
                 <Routes>
                   <Route path="/" element={<Home />} />
@@ -34,6 +37,7 @@ function App() {
                   <Route path="/register" element={<Register />} />
                   <Route path="/createVideo" element={<CreateVideo />} />
                   <Route path="/results" element={<Results />} />
+                  <Route path="/watch" element={<Watch />} />
                 </Routes>
               </div>
             </div>

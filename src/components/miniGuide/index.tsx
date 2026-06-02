@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MenuContext } from "../../contexts/MenuContext";
 import {
     Container,
@@ -36,7 +36,6 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/UserContext";
 
 
-
 const items = [
     { label: 'Início', icon: InicioIcon, link: '/' },
     { label: 'Shorts', icon: ShortsIcon, link: '/shorts' },
@@ -62,17 +61,14 @@ const maisYTItems = [
     { label: 'Youtube Kids', icon: YTKidsIcon },
 ]
 
-function Menu() {
-
+function MiniGuide() {
     const { login } = useContext(UserContext)
-    const { openMenu } = useContext(MenuContext);
+    const { openMenu, positionMenu, setOpenMenu } = useContext(MenuContext);
     const [openExplorar, setOpenExplorar] = useState(false);
-
     const navigate = useNavigate();
 
     return (
-        <Container $openMenu={openMenu}>
-
+        <Container $openMenu={openMenu} $positionMenu={positionMenu}>
             <FirstMenuContent $openMenu={openMenu}>
                 {items
                     .filter(item => openMenu || item.label !== "Histórico")
@@ -83,7 +79,6 @@ function Menu() {
                         </MenuItem>
                     ))}
             </FirstMenuContent>
-
             {
                 !login && (
 
@@ -96,7 +91,6 @@ function Menu() {
                     </LoginContent>
                 )
             }
-
             <MenuContent $openMenu={openMenu}>
                 <MenuTopic>Explorar</MenuTopic>
                 <ExplorarContent $openExplorar={openExplorar}>
@@ -124,8 +118,8 @@ function Menu() {
                 ))}
             </MenuContent>
 
-            <MenuContent $openMenu={openMenu}>
-                <MenuItem $openMenu={openMenu}>
+            <MenuContent $openMenu={openMenu} >
+                <MenuItem $openMenu={openMenu} >
                     <ButtonIcon alt="" src={HisDenIcon} />
                     <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Histórico de denúncias</span>
                 </MenuItem>
@@ -135,4 +129,4 @@ function Menu() {
     )
 }
 
-export default Menu;
+export default MiniGuide;

@@ -9,6 +9,7 @@ import {
     Title
 } from "./styles";
 import { VideoContext } from "../../contexts/VideoContext";
+import { useNavigate } from "react-router-dom";
 
 interface IProps {
     image: string,
@@ -49,6 +50,7 @@ const viewsFormat = (views: number) => {
 }
 
 function VideoResultsComponent({ video }: { video: IProps }) {
+    const navigate = useNavigate();
     const nome = video.user_name as string;
 
     const { videoAddviews } = useContext(VideoContext);
@@ -57,7 +59,7 @@ function VideoResultsComponent({ video }: { video: IProps }) {
     const PLACEHOLDER = 'https://i.ytimg.com/vi/T0mzlyJ_xqs/hq720.jpg';
 
     return (
-        <Container onClick={() => videoAddviews(video.video_id)}>
+        <Container onClick={() => {videoAddviews(video.video_id); navigate(`/watch?v=${video.video_id}`)}}>
             <ImageBanner src={video.image ? `${BASE_URL}/uploads/${video.image}` : PLACEHOLDER} />
             <TextContainer>
                 <Title>{video.title}</Title>

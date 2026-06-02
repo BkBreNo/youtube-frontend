@@ -12,12 +12,19 @@ export const Container = styled.header`
     justify-content: space-between;
     position: sticky;
     top: 0px;
-    z-index: 999;
+    z-index: 1000;
 `;
 
 export const LogoContainer = styled.div`
     display: flex;
     align-items: center;
+`;
+
+export const CountryCode = styled.span`
+    margin-left: 5px;
+    color: rgba(0,0,0,.8);
+    font-size: 10px;
+    transform: translateY(-10px);
 `;
 
 export const ButtonContainer = styled.div<{ $margin?: string }>`
@@ -36,7 +43,7 @@ export const ButtonContainer = styled.div<{ $margin?: string }>`
 `;
 
 export const ButtonIcon = styled.img`
-    width: 20px;
+    width: 24px;
 `;
 
 export const SearchContainer = styled.div`
@@ -120,7 +127,6 @@ export const DropDownContent = styled.div<{ $dropDown: boolean }>`
     width: 20%;
     border-radius: 12px;
     box-shadow: 0 0px 16px rgba(0,0,0,.1);
-    z-index: 999;
 `;
 
 export const HeaderContent = styled.div`

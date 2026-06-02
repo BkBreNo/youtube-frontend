@@ -8,25 +8,9 @@ export const ContentEF = styled.div<{ $color: any }>`
     left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 12px;
-    transition: .3s ease;
+    transition: .25s ease;
     z-index: 1;
-    background: ${({ $color }) => $color};
-    opacity: 0.1;
-`;
-
-export const Container = styled.div`
-    position: relative;
-    width: 100%;
-    height: fit-content;
-    box-sizing: border-box;
-    cursor: pointer;
-
-    &:hover ${ContentEF}{
-        /* background-color: rgba(255,0,0,.03); */
-        width: 100%;
-        height: 100%;
-        transform: translate(-50%, -50%) scale(1.08);
-    }
+    background: ${({ $color }) => `hsl(${$color[0]},${$color[1]}%,98.5%)`};
 `;
 
 export const Content = styled.div`
@@ -47,11 +31,30 @@ export const ImageBanner = styled.img`
     object-fit: cover;
 `;
 
-export const TitleContainer = styled.div`
+export const ContentContainer = styled.div`
     min-width: 0;
     width: 100%;
     display: flex;
     gap: 10px;
+    box-sizing: border-box;
+`;
+
+export const TitleContainer = styled.div`
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    box-sizing: border-box;
+`;
+
+export const TextContainer = styled.div`
+    min-width: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4px;
     box-sizing: border-box;
 `;
 
@@ -65,24 +68,55 @@ export const ChannelImage = styled.div`
     border-radius: 50%;
 `;
 
-export const TextContainer = styled.div`
-    min-width: 0;
-    width: 100%;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-`;
-
 export const Title = styled.span`
     display: -webkit-box;
     font-weight: 600;
-    color: #0f0f0f;
+    color: rgba(0, 0, 0, 0.9);
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    transition: .25s ease;
 `;
 
 export const TextCard = styled.span`
-    color: #8c8c8c;
+    color: rgba(0, 0, 0, 0.5);
     font-size: 14px;
+    transition: .25s ease;
+`;
+
+export const Icon = styled.svg`
+    transition: .25s ease;
+    width: 14px;
+    path {
+        fill: rgba(0, 0, 0, 0.5);
+    }
+`;
+
+export const Container = styled.div<{ $color: Array<any> }>`
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: .25s ease;
+    
+    &:hover ${ContentEF}{
+        width: 100%;
+        height: 100%;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    &:hover ${Title}{
+        color: ${({ $color }) => `hsl(${$color[0]},${$color[1]}%,30%)`};
+    }
+
+    &:hover ${TextCard}{
+        color: ${({ $color }) => `hsl(${$color[0]},${$color[1]}%,60%)`};
+    }
+
+    &:hover ${Icon}{
+        path {
+            fill: ${({ $color }) => `hsl(${$color[0]},${$color[1]}%,60%)`};
+        }
+    }
 `;
