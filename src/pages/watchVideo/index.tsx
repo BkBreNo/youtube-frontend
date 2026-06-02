@@ -8,7 +8,6 @@ import {
     Text,
     ButtonContainer,
     SvgIcon,
-    ButtonIcon,
     ButtonSubscribe,
     ButtonText,
     LikeContainer,
@@ -19,7 +18,6 @@ import { VideoContext } from "../../contexts/VideoContext";
 import { useSearchParams } from "react-router-dom";
 import { MenuContext } from "../../contexts/MenuContext";
 import { ChannelImage } from "../../components/videoComponent/styles";
-import SetaIcon from '../../assets/icons/Seta.svg'
 
 function Watch() {
     const [searchParams] = useSearchParams();
@@ -39,7 +37,7 @@ function Watch() {
         }
 
         return () => { setPositionMenu(false); setOpenMenu(true); };
-    }, [id, getVideo]);
+    }, [id, getVideo, setPositionMenu, setOpenMenu, setListVideos]);
 
     if (!infoVideo) return <span>Carregando...</span>;
 

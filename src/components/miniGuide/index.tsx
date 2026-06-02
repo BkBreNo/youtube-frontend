@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { MenuContext } from "../../contexts/MenuContext";
 import {
     Container,
@@ -63,7 +63,7 @@ const maisYTItems = [
 
 function MiniGuide() {
     const { login } = useContext(UserContext)
-    const { openMenu, positionMenu, setOpenMenu } = useContext(MenuContext);
+    const { openMenu, positionMenu } = useContext(MenuContext);
     const [openExplorar, setOpenExplorar] = useState(false);
     const navigate = useNavigate();
 

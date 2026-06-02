@@ -33,7 +33,7 @@ function Header() {
     const navigate = useNavigate();
 
     const { login, user, logOut } = useContext(UserContext)
-    const { openMenu, setOpenMenu, results, setResults, positionMenu } = useContext(MenuContext);
+    const { openMenu, setOpenMenu, results, setResults } = useContext(MenuContext);
     const [dropDown, setDropDown] = useState(false);
 
     const nome = user.nome as string;

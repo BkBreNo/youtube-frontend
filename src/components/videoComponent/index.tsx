@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import {
     ChannelImage,
     Container,
@@ -12,7 +11,6 @@ import {
     Title,
     TitleContainer,
 } from "./styles";
-import { VideoContext } from "../../contexts/VideoContext";
 import { useNavigate } from "react-router-dom";
 
 interface IProps {
