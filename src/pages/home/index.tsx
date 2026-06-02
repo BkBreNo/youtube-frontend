@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect } from "react";
 import { MenuContext } from "../../contexts/MenuContext";
 import VideoComponent from "../../components/videoComponent";
 import {
@@ -20,7 +20,7 @@ function Home() {
         setInfo('');
         setResults('');
         searchVideo('');
-    }, [setRegister, setInfo, setResults])
+    }, [setRegister, setInfo, setResults, searchVideo])
 
     return (
         <HomeContainer>
