@@ -23,10 +23,12 @@ type VideoContextType = {
     setInfo: (newState: string) => void,
     listVideos: ListVideosProps[],
     setListVideos: (newState: ListVideosProps[]) => void,
-    createVideo: (token: string, image: File | null, title: string, description: string, user_id: string, date: string, views: Number) => void,
+    createVideo: (token: string, video: File | null, image: File | null, title: string, description: string, user_id: string, date: string, views: Number) => void,
     searchVideo: (search: string) => void,
     videoAddviews: (video_id: string) => void,
-    getVideo: (video_id: string) => void
+    getVideo: (video_id: string) => void,
+    video: ListVideosProps[],
+    setVideo: (newState: ListVideosProps[]) => void,
 }
 
 const initialValue = {
@@ -38,6 +40,8 @@ const initialValue = {
     searchVideo: () => { },
     videoAddviews: () => { },
     getVideo: () => { },
+    video: [] as ListVideosProps[],
+    setVideo: () => { },
 }
 
 export const VideoContext = createContext<VideoContextType>(initialValue);
@@ -45,8 +49,9 @@ export const VideoContext = createContext<VideoContextType>(initialValue);
 export const VideoStorage = ({ children }: VideoStorageProps) => {
     const [info, setInfo] = useState(initialValue.info);
     const [listVideos, setListVideos] = useState(initialValue.listVideos);
+    const [video, setVideo] = useState(initialValue.video);
 
-    const createVideo = (token: string, image: File | null, title: string, description: string, user_id: string, date: string, views: Number) => {
+    const createVideo = (token: string, video: File | null, image: File | null, title: string, description: string, user_id: string, date: string, views: Number) => {
 
         const formData = new FormData();
         formData.append('title', title);
@@ -55,6 +60,9 @@ export const VideoStorage = ({ children }: VideoStorageProps) => {
         formData.append('date', date);
         formData.append('views', String(views));
 
+        if (video) {
+            formData.append('video', video);
+        }
         if (image) {
             formData.append('image', image);
         }
@@ -67,7 +75,7 @@ export const VideoStorage = ({ children }: VideoStorageProps) => {
 
     const getVideo = useCallback((video_id: string) => {
         api.get('/videos/get-video', { params: { video_id } }).then(({ data }) => {
-            setListVideos(data.videos);
+            setVideo(data.videos);
         }).catch(() => { })
     }, []);
 
@@ -91,6 +99,8 @@ export const VideoStorage = ({ children }: VideoStorageProps) => {
             searchVideo,
             listVideos,
             videoAddviews,
+            video,
+            setVideo,
         }}>
             {children}
         </VideoContext.Provider>

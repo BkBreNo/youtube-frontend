@@ -20,7 +20,7 @@ function Home() {
         setInfo('');
         setResults('');
         searchVideo('');
-    }, [setRegister, setInfo, setResults, searchVideo])
+    }, [setRegister, setInfo, setResults])
 
     return (
         <HomeContainer>
@@ -41,11 +41,11 @@ function Home() {
             <Container $openMenu={openMenu}>
                 {openMenu ?
                     listVideos.slice(3).map((listVideos: any, i: any) => (
-                        <VideoComponent key={i} video={listVideos} />
+                        <VideoComponent key={listVideos.video_id} video={listVideos} />
                     ))
                     :
                     listVideos.slice(4).map((listVideos: any, i: any) => (
-                        <VideoComponent key={i} video={listVideos} />
+                        <VideoComponent key={listVideos.video_id} video={listVideos} />
                     ))
                 }
             </Container>

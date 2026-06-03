@@ -16,7 +16,7 @@ export const Content = styled.div<{ $width?: string, $flexDirection?: string, $p
     display: flex;
     flex-direction: ${({ $flexDirection }) => $flexDirection ? $flexDirection : 'row'};
     width: ${({ $width }) => $width ? $width : '100%'};
-    justify-content: ${({ $justify }) => $justify ? $justify : 'center'};
+    justify-content: ${({ $justify }) => $justify ? $justify : 'flex-start'};
     padding: ${({ $padding }) => $padding ? $padding : 0};
     gap:${({ $gap }) => $gap ? $gap : 0};
     box-sizing: border-box;

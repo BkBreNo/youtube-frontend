@@ -18,67 +18,70 @@ import { VideoContext } from "../../contexts/VideoContext";
 import { useSearchParams } from "react-router-dom";
 import { MenuContext } from "../../contexts/MenuContext";
 import { ChannelImage } from "../../components/videoComponent/styles";
+import MiniVideoComponent from "../../components/miniVideoComponent";
+
+const diferencaEmDias = (dataVideo: string) => {
+    const hoje = new Date();
+    const data = new Date(dataVideo);
+    const diferenca = hoje.getTime() - data.getTime();
+    const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+    return dias;
+}
+
+const tempoPassado = (dataVideo: string) => {
+    const dias = diferencaEmDias(dataVideo);
+
+    if (dias === 0) return 'Hoje';
+    if (dias === 1) return 'Ontem';
+    if (dias < 7) return `há ${dias} dias atrás`;
+    if (dias < 30) return `há ${Math.floor(dias / 7)} semanas atrás`;
+    if (dias < 365) return `há ${Math.floor(dias / 30)} meses atrás`;
+    return `há ${Math.floor(dias / 365)} anos atrás`;
+}
+
+const viewsFormat = (views: number) => {
+    if (views === 0) return 'nenhuma visualização'
+    if (views === 1) return '1 visualização'
+    if (views < 1000) return `${views} visualizações`
+    if (views < 1000000) return `${(views / 1000).toFixed(0).replace('.0', '')} mil visualizações`
+    return `${(views / 1000000).toFixed(0).replace('.0', '')} mi visualizações`
+}
 
 function Watch() {
     const [searchParams] = useSearchParams();
     const id = searchParams.get('v');
-    const { listVideos, getVideo, setListVideos } = useContext(VideoContext);
+    const { listVideos, getVideo, video, setVideo, searchVideo } = useContext(VideoContext);
     const { setPositionMenu, setOpenMenu } = useContext(MenuContext);
-
-    const BASE_URL = process.env.REACT_APP_API_URL
-    const infoVideo = listVideos[0];
 
     useEffect(() => {
         setPositionMenu(true);
         setOpenMenu(false);
         if (id) {
-            setListVideos([]);
+            setVideo([]);
             getVideo(id);
+            searchVideo('');
         }
 
-        return () => { setPositionMenu(false); setOpenMenu(true); };
-    }, [id, getVideo, setPositionMenu, setOpenMenu, setListVideos]);
+        return () => { setPositionMenu(false); setOpenMenu(true) };
+    }, [id]);
+
+    const BASE_URL = process.env.REACT_APP_API_URL
+    const infoVideo = video[0];
 
     if (!infoVideo) return <span>Carregando...</span>;
 
     const nome = infoVideo.user_name as string;
     const bgColor = infoVideo.image_color ? JSON.parse(infoVideo.image_color) : [0, 0, 0];
 
-    const diferencaEmDias = (dataVideo: string) => {
-        const hoje = new Date();
-        const data = new Date(dataVideo);
-        const diferenca = hoje.getTime() - data.getTime();
-        const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
-        return dias;
-    }
-
-    const tempoPassado = (dataVideo: string) => {
-        const dias = diferencaEmDias(dataVideo);
-
-        if (dias === 0) return 'Hoje';
-        if (dias === 1) return 'Ontem';
-        if (dias < 7) return `há ${dias} dias atrás`;
-        if (dias < 30) return `há ${Math.floor(dias / 7)} semanas atrás`;
-        if (dias < 365) return `há ${Math.floor(dias / 30)} meses atrás`;
-        return `há ${Math.floor(dias / 365)} anos atrás`;
-    }
-
-    const viewsFormat = (views: number) => {
-        if (views === 0) return 'nenhuma visualização'
-        if (views === 1) return '1 visualização'
-        if (views < 1000) return `${views}`
-        if (views < 1000000) return `${(views / 1000).toFixed(0).replace('.0', '')} mil visualizações`
-        return `${(views / 1000000).toFixed(0).replace('.0', '')} mi visualizações`
-    }
 
     return (
-        <Content $flexDirection={'column'}>
+        <Content $flexDirection={'column'} $width={'100%'}>
             <VideoContent>
-                <Video controls autoPlay>
+                <Video controls autoPlay key={infoVideo.video_id}>
                     <source src={`${BASE_URL}/videos/stream/${infoVideo.video}`} type="video/mp4" />
                 </Video>
             </VideoContent>
-            <Content $padding={'4px 12px'}>
+            <Content $padding={'4px 12px'} $gap={'16px'}>
                 <Content $width={'70%'} $flexDirection={'column'} $gap={'12px'}>
                     <Title>{infoVideo.title}</Title>
                     <Content $justify={'space-between'} $width={'100%'}>
@@ -100,7 +103,7 @@ function Watch() {
                             <LikeContainer>
                                 <LikeContent $borderRadius={'50px 0 0 50px'}>
                                     <SvgIcon width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M7 10V22M15 5.88L14 10H19.83C20.1405 10 20.4467 10.0723 20.7244 10.2111C21.0021 10.35 21.2437 10.5516 21.43 10.8C21.6163 11.0484 21.7422 11.3367 21.7977 11.6422C21.8533 11.9477 21.8369 12.2619 21.75 12.56L19.42 20.56C19.2988 20.9754 19.0462 21.3404 18.7 21.6C18.3538 21.8596 17.9327 22 17.5 22H4C3.46957 22 2.96086 21.7893 2.58579 21.4142C2.21071 21.0391 2 20.5304 2 20V12C2 11.4696 2.21071 10.9609 2.58579 10.5858C2.96086 10.2107 3.46957 10 4 10H6.76C7.13208 9.9998 7.49674 9.89581 7.81296 9.69972C8.12917 9.50363 8.38442 9.22321 8.55 8.89L12 2C12.4716 2.00584 12.9357 2.11817 13.3578 2.3286C13.7799 2.53902 14.1489 2.84211 14.4374 3.2152C14.7259 3.5883 14.9263 4.02176 15.0237 4.4832C15.1212 4.94464 15.113 5.42213 15 5.88Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M7 10V22M15 5.88L14 10H19.83C20.1405 10 20.4467 10.0723 20.7244 10.2111C21.0021 10.35 21.2437 10.5516 21.43 10.8C21.6163 11.0484 21.7422 11.3367 21.7977 11.6422C21.8533 11.9477 21.8369 12.2619 21.75 12.56L19.42 20.56C19.2988 20.9754 19.0462 21.3404 18.7 21.6C18.3538 21.8596 17.9327 22 17.5 22H4C3.46957 22 2.96086 21.7893 2.58579 21.4142C2.21071 21.0391 2 20.5304 2 20V12C2 11.4696 2.21071 10.9609 2.58579 10.5858C2.96086 10.2107 3.46957 10 4 10H6.76C7.13208 9.9998 7.49674 9.89581 7.81296 9.69972C8.12917 9.50363 8.38442 9.22321 8.55 8.89L12 2C12.4716 2.00584 12.9357 2.11817 13.3578 2.3286C13.7799 2.53902 14.1489 2.84211 14.4374 3.2152C14.7259 3.5883 14.9263 4.02176 15.0237 4.4832C15.1212 4.94464 15.113 5.42213 15 5.88Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </SvgIcon >
                                 </LikeContent>
                                 <svg width="1" height="24" viewBox="0 0 1 38" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -108,7 +111,7 @@ function Watch() {
                                 </svg>
                                 <LikeContent $borderRadius={'0 50px 50px 0'}>
                                     <SvgIcon width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M17 14V2M9 18.12L10 14H4.17C3.85951 14 3.55328 13.9277 3.27557 13.7889C2.99786 13.65 2.75629 13.4484 2.57 13.2C2.3837 12.9516 2.2578 12.6633 2.20226 12.3578C2.14672 12.0523 2.16306 11.7381 2.25 11.44L4.58 3.44C4.70117 3.02457 4.95381 2.65964 5.3 2.4C5.64619 2.14036 6.06726 2 6.5 2H20C20.5304 2 21.0391 2.21071 21.4142 2.58579C21.7893 2.96086 22 3.46957 22 4V12C22 12.5304 21.7893 13.0391 21.4142 13.4142C21.0391 13.7893 20.5304 14 20 14H17.24C16.8679 14.0002 16.5033 14.1042 16.187 14.3003C15.8708 14.4964 15.6156 14.7768 15.45 15.11L12 22C11.5284 21.9942 11.0643 21.8818 10.6422 21.6714C10.2201 21.461 9.85107 21.1579 9.56259 20.7848C9.27412 20.4117 9.07368 19.9782 8.97626 19.5168C8.87884 19.0554 8.88696 18.5779 9 18.12Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M17 14V2M9 18.12L10 14H4.17C3.85951 14 3.55328 13.9277 3.27557 13.7889C2.99786 13.65 2.75629 13.4484 2.57 13.2C2.3837 12.9516 2.2578 12.6633 2.20226 12.3578C2.14672 12.0523 2.16306 11.7381 2.25 11.44L4.58 3.44C4.70117 3.02457 4.95381 2.65964 5.3 2.4C5.64619 2.14036 6.06726 2 6.5 2H20C20.5304 2 21.0391 2.21071 21.4142 2.58579C21.7893 2.96086 22 3.46957 22 4V12C22 12.5304 21.7893 13.0391 21.4142 13.4142C21.0391 13.7893 20.5304 14 20 14H17.24C16.8679 14.0002 16.5033 14.1042 16.187 14.3003C15.8708 14.4964 15.6156 14.7768 15.45 15.11L12 22C11.5284 21.9942 11.0643 21.8818 10.6422 21.6714C10.2201 21.461 9.85107 21.1579 9.56259 20.7848C9.27412 20.4117 9.07368 19.9782 8.97626 19.5168C8.87884 19.0554 8.88696 18.5779 9 18.12Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </SvgIcon >
                                 </LikeContent>
                             </LikeContainer >
@@ -131,12 +134,19 @@ function Watch() {
                     </Content>
                     <Content $flexDirection={'column'}>
                         <DescriptionContent $color={bgColor}>
-                            <BoldText>{viewsFormat(infoVideo.views)}  {tempoPassado(infoVideo.date)}</BoldText>
+                            <BoldText>{viewsFormat(infoVideo.views)}&nbsp;&nbsp;{tempoPassado(infoVideo.date)}</BoldText>
                             <span>{infoVideo.description}</span>
                         </DescriptionContent>
                     </Content>
                 </Content>
-                <Content $width={'30%'}>
+                <Content $width={'30%'} $flexDirection={'column'} $gap={'6px'}>
+                    {
+                        listVideos
+                        .filter(listVideos => listVideos.video_id !== id)
+                        .map((listVideos: any) => (
+                            <MiniVideoComponent key={listVideos.video_id} video={listVideos} />
+                        ))
+                    }
                 </Content>
             </Content>
         </Content >

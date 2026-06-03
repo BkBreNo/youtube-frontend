@@ -18,6 +18,7 @@ import { VideoContext } from "../../contexts/VideoContext";
 function CreateVideo() {
     const { createVideo, info, setInfo } = useContext(VideoContext);
     const { user, token, login } = useContext(UserContext);
+    const [video, setVideo] = useState<File | null>(null)
     const [image, setImage] = useState<File | null>(null)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
@@ -36,7 +37,7 @@ function CreateVideo() {
             }
         }
         if (title !== '' && description !== '') {
-            createVideo(token, image, title, description, user.id, date, 0)
+            createVideo(token, video, image, title, description, user.id, date, 0)
         }
     }
 
@@ -48,7 +49,11 @@ function CreateVideo() {
                         <span> {info}</span>
                     )}
                     <Title>Criar Video</Title>
-                     <InputContent>
+                    <InputContent>
+                        <span>Video</span>
+                        <InputFile type='file' accept="video/mp4" onChange={(e) => setVideo(e.target.files?.[0] || null)} />
+                    </InputContent>
+                    <InputContent>
                         <span>Capa</span>
                         <InputFile type='file' accept="image/png, image/jpeg" onChange={(e) => setImage(e.target.files?.[0] || null)} />
                     </InputContent>

@@ -58,7 +58,6 @@ export const UserStorage = ({ children }: UserStorageProps) => {
         }).catch(() => { })
     }
 
-
     useEffect(() => {
         getUser(token);
     }, [token])

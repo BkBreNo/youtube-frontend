@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
     ChannelImage,
     Container,
@@ -12,6 +13,7 @@ import {
     TitleContainer,
 } from "./styles";
 import { useNavigate } from "react-router-dom";
+import { VideoContext } from "../../contexts/VideoContext";
 
 interface IProps {
     image: string,
@@ -54,6 +56,7 @@ const viewsFormat = (views: number) => {
 
 function VideoComponent({ video }: { video: IProps }) {
     const navigate = useNavigate();
+    const { videoAddviews } = useContext(VideoContext);
 
     const nome = video.user_name as string;
 
@@ -63,7 +66,7 @@ function VideoComponent({ video }: { video: IProps }) {
     const bgColor = video.image_color ? JSON.parse(video.image_color) : [0, 0, 0];
 
     return (
-        <Container $color={bgColor} onClick={() => navigate(`/watch?v=${video.video_id}`)}>
+        <Container $color={bgColor} onClick={() => { videoAddviews(video.video_id); navigate(`/watch?v=${video.video_id}`) }}>
             <ContentEF $color={bgColor} />
             <Content>
                 <ImageBanner src={image} />

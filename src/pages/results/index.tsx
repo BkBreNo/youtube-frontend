@@ -32,7 +32,7 @@ function Results() {
             <Container>
                 {
                     listVideos.map((listVideos: any) => (
-                        <VideoResultsComponent key={listVideos.title} video={listVideos} />
+                        <VideoResultsComponent key={listVideos.video_id} video={listVideos} />
                     ))
                 }
             </Container>
