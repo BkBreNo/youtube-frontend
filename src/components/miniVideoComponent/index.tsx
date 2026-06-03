@@ -49,7 +49,6 @@ const viewsFormat = (views: number) => {
 
 function MiniVideoComponent({ video }: { video: IProps }) {
     const navigate = useNavigate();
-    const nome = video.user_name as string;
 
     const { videoAddviews } = useContext(VideoContext);
 

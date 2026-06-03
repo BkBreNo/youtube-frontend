@@ -79,11 +79,11 @@ export const VideoStorage = ({ children }: VideoStorageProps) => {
         }).catch(() => { })
     }, []);
 
-    const searchVideo = useEffectEvent((search: string) => {
+    const searchVideo = useCallback((search: string) => {
         api.get('/videos/search', { params: { search } }).then(({ data }) => {
             setListVideos(data.videos);
         }).catch(() => { });
-    });
+    }, []);
 
     const videoAddviews = (video_id: string) => {
         api.post('/videos/addviews', { video_id }).then(({ data }) => { }).catch(() => { })

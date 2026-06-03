@@ -63,7 +63,7 @@ function Watch() {
         }
 
         return () => { setPositionMenu(false); setOpenMenu(true) };
-    }, [id]);
+    }, [id, getVideo, searchVideo, setOpenMenu, setPositionMenu, setVideo]);
 
     const BASE_URL = process.env.REACT_APP_API_URL
     const infoVideo = video[0];
